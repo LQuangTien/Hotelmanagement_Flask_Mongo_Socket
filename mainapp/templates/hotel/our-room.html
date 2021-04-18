@@ -1,0 +1,142 @@
+{% extends 'base/base.html' %}
+{% block title %}
+<title>Chondo Hotel | Our room</title>
+{% endblock %}
+{% set name = 'Rooms' %}
+{% block content %}
+
+<!--Room Section Title start-->
+<div class="room-section text-center ptb-80 white_bg">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-title mb-75">
+          <h2>Our <span>room</span></h2>
+        </div>
+      </div>
+    </div>
+    <div class="our-room-show">
+      <div class="row">
+        <div class="our-room-list owl-pagination">
+          {% for page in range(0, totalPage) %}
+          <div class="single-room-sapce">
+            {% for room in rooms[page * perPage : (page + 1) * perPage] %}
+
+            <form action="/booking" method="post" id="form">
+              <input type="hidden" id="roomName" name="roomName" value={{room.name}} >
+              <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="single-room mb-80">
+                  <div class="room-img">
+                    <a onclick="roomClick()">
+                      <img width="370px" height="256px" src="{{ url_for('static', filename=room.image)}}" alt="">
+                    </a>
+                  </div>
+                  <div class="room-desc">
+                    <div class="room-name">
+                      <h3>
+                        <a onclick="roomClick()">
+                          Room {{room.name}} ({{room.capacity}} people)
+                        </a>
+                      </h3>
+                    </div>
+                    <div class="room-rent">
+                      <h5>Room type: {{room.type}}</h5>
+                      <h5>{{ "{:,}".format(room.price) }} VND<span>/day</span></h5>
+                    </div>
+                    {% if visit != True %}
+                    <div class="room-book">
+                      <button style="border: none">
+                        <a>Book now</a>
+                      </button>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </form>
+            {% endfor %}
+          </div>
+          {% endfor %}
+          {% if totalPage == 0 %}
+            <h4>Out of room, please book again</h4>
+          {% endif %}
+        </div>
+      </div>
+      <div class="booking-info-deatils">
+        <div class="single-room-booking-form mt-60">
+            <div class="booking_form_inner">
+                <form action="{{ url_for('rooms') }}" style="text-align: left">
+                    <div class="single-form-part">
+                        <label for="arriveDate" class="booking-label">Arrive Date</label>
+                        <div class="date-to mb-20">
+                            <input id="arriveDate" type="date" name="arriveDate" required onchange="compareDate()">
+                        </div>
+                    </div>
+                    <div class="single-form-part">
+                        <label for="departureDate" class="booking-label">Departure Date</label>
+                        <div class="date-to mb-20">
+                            <input id="departureDate" type="date" name="departureDate" required onchange="compareDate()">
+                        </div>
+                    </div>
+                    <div class="single-form-part">
+                        <label id="hasForeignerInput" class="booking-label mb-15" for="hasForeigner">Has foreinger ? <input id="hasForeigner" type="checkbox" name="hasForeigner" value="True"></label>
+                    </div>
+                    <div class="single-form-part custom-part">
+                        <label for="departureDate" class="booking-label">Room Type</label>
+                        <div class="select-book mb-20">
+                            <select id="type" name="type" style="border: 1px solid white;" required>
+                                <option value="Any">Any</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="single-form-part custom-part">
+                        <label for="departureDate" class="booking-label">Number of guest</label>
+                        <div class="select-book mb-20">
+                            <select id="numberOfGuest" name="numberOfGuest" style="border: 1px solid white;" required>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="submit-form">
+                        <button type="submit">Check Availability</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block script %}
+<script>
+  if('{{visit}}' != 'True'){
+      $('a').css("cursor", "pointer");
+  }
+  function roomClick(){
+    if('{{visit}}' == 'True'){
+      return
+    }
+    $('.room-book > button').click()
+  }
+  </script>
+<script>
+  $('#arriveDate').prop('min', function(){
+      return new Date().toJSON().split('T')[0];
+   });
+   $('#departureDate').prop('min', function(){
+      return new Date().toJSON().split('T')[0];
+   });
+  function compareDate() {
+      var arriveDate = document.getElementById("arriveDate").value;
+      var departureDate = document.getElementById("departureDate").value;
+      if (new Date(arriveDate).getTime() > new Date(departureDate).getTime()) {
+            alert("Departure date must be bigger than arrive date");
+            document.getElementById("departureDate").value = null;
+            return false;
+       }
+      return true;
+  }
+</script>
+{% endblock %}

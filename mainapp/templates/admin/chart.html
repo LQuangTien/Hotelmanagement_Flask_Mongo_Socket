@@ -1,0 +1,89 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+<style>
+  .chart__layout {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+  }
+  .chart__wrapper {
+    width: 100%;
+    height: 100%;
+    border: 1px solid rbga(0,0,0,0);
+    border-radius: 12px;
+    margin: 12px 24px;
+    color: gray;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 0 12px 6px #f0f0f0;
+  }
+  .chart__wrapper button {
+    border: 1px solid #007bff;
+    background-color: #007bff;
+    color: white !important;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    padding: 6px 16px;
+    border-radius: 6px;
+  }
+  .chart__size {
+    width: 100%;
+    height: 100%;
+    margin: 12px 0;
+  }
+</style>
+<div class="chart__layout">
+  <div class="chart__wrapper" >
+
+    <canvas class="chart__size" id="salesChart"></canvas>
+    <p>{{salesMonth}}-{{salesYear}}</p>
+    <button type="button" onclick="backsale()">Back</button>
+    <button type="button" onclick="nextsale()">Next</button>
+    <div>
+      <input type="number" id="monthsale" min="1" max="12" placeholder="Month">
+      <input type="number" id="yearsale" min="2021" max="9999" placeholder="Year">
+      <button onclick="findsale()">Find</button>
+    </div>
+
+  </div>
+  <div class="chart__wrapper" >
+    <canvas class="chart__size" id="usedChart"></canvas>
+    <p>{{usedMonth}}-{{usedYear}}</p>
+    <button type="button" onclick="backused()">Back</button>
+    <button type="button" onclick="nextused()">Next</button>
+    <div>
+      <input type="number" id="monthused" min="1" max="12" placeholder="Month">
+      <input type="number" id="yearused" min="2021" max="9999" placeholder="Year">
+      <button onclick="findused()">Find</button>
+    </div>
+  </div>
+</div>
+
+
+<form method="get" id="formDate">
+  <input type="hidden" name="salesMonth" id="salesMonth">
+  <input type="hidden" name="salesYear" id="salesYear">
+  <input type="hidden" name="usedMonth" id="usedMonth">
+  <input type="hidden" name="usedYear" id="usedYear">
+</form>
+
+<script src="{{ url_for('static', filename='js/vendor/jquery-1.12.0.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/Chart.min.js')}}"></script>
+<script>
+    Chart.defaults.global.responsive = false;
+    var salesData = {{ salesChartJSON | safe }}
+    var saleCtx = document.getElementById("salesChart").getContext('2d');
+    var salesChart = new Chart(saleCtx, salesData);
+
+    var usedData = {{ usedChartJSON | safe }}
+    var usedCtx = document.getElementById("usedChart").getContext('2d');
+    var usedChart = new Chart(usedCtx, usedData);
+</script>
+<script src="{{ url_for('static', filename='js/chart.js')}}"></script>
+
+
+{% endblock %}

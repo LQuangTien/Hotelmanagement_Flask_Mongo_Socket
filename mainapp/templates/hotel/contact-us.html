@@ -1,0 +1,65 @@
+{% extends 'base/base.html' %}
+{% block title %}
+    <title>Chondo Hotel | Contact us</title>
+{% endblock %}
+{% set name = 'Contact' %}
+{% block content %}
+  <!--Conatct form area Start-->
+        <div class="contact-form-info ptb-100 white_bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="contact-form">
+                            <div class="contact-form-inner">
+                                <form id="contact-form" action="{{url_for('contact')}}" method="post">
+                                    <p class="form-messege"></p>
+                                    <div class="form-field-top mb-20">
+                                        <div class="form-field-name">
+                                            <input name="name" type="text" placeholder="Your name">
+                                        </div>
+                                        <div class="form-field-name">
+                                            <input name="email" type="text" placeholder="Your email">
+                                        </div>
+                                    </div>
+                                    <div class="form-field-bottom">
+                                        <div class="textarea">
+                                            <textarea name="message" placeholder="Your messege"></textarea>
+                                        </div>
+                                        <div class="submit mt-30"><button type="submit">Submit</button></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="contact-info">
+                            <div class="contact-info-title mb-25"><h3>contact info</h3></div>
+                            <div class="contact-adresses">
+                                <div class="phone mb-15">
+                                    <p>
+                                        <span><i class="mdi mdi-phone"></i></span>
+                                        <span class="desc">0366 399 804 </span>
+                                    </p>
+                                </div>
+                                <div class="mail mb-15">
+                                    <p>
+                                    <span><i class="mdi mdi-email"></i></span>
+                                    <span class="desc" style="text-transform: none;">18110376@hcmute.edu.vn</span>
+                                    </p>
+                                </div>
+                                <div class="addresses">
+                                    <p>
+                                        <span><i class="mdi mdi-map-marker"></i></span>
+                                        <span class="desc">Street: 1 Vo Van Ngan, Sub-district: Linh Chieu, City: Thu Duc</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Conatct form area end-->
+{% endblock %}
+
+

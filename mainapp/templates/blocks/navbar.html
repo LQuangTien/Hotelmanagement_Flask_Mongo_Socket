@@ -1,0 +1,74 @@
+<div class="top-header sticky-header">
+    <div class="top-header-inner">
+        <div class="container">
+            <div class="mgea-full-width">
+                <div class="row">
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                        <div class="logo mt-15">
+                            <a href="/"><img src="{{url_for('static', filename='images/logo/logo.png')}}" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="col-md-10 col-sm-10 hidden-xs">
+                        <div class="header-top ptb-10">
+                            <div class="adresses">
+                                <div class="phone">
+                                    <p>call <span>0366 399 804 </span></p>
+                                </div>
+                                <div class="email">
+                                    <p>Email: <span style="text-transform: none;">18110376@hcmute.edu.vn</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu mt-20">
+                            <div class="menu-list hidden-sm hidden-xs thanhnav">
+                                <nav >
+                                    <ul >
+                                        <li><a href="/">Home</a></li>
+                                        <li><a href="/aboutus">About</a></li>
+                                        <li><a href="/contact">Contact</a></li>
+                                        <li><a href="/our-rooms">Our rooms</a></li>
+                                        {% if not current_user.is_authenticated %}
+                                        <li class="auth"><a href="/login">Login</a></li>
+                                        {% elif current_user.is_authenticated %}
+                                        <li class="auth"><a>Hello, <span>{{current_user.username}}</span><i class="fa fa-angle-down"></i></a>
+                                            <ul class="dropdown_menu">
+                                                <li><a href="/history">History</a></li>
+                                                <li><a href="/logout">Log out</a></li>
+                                            </ul>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- Mobile menu start -->
+     <div class="mobile-menu-area hidden-lg hidden-md">
+        <div class="container">
+            <div class="col-md-12">
+                <nav id="dropdown">
+                <ul>
+                    {% if not current_user.is_authenticated %}
+                    <li class="auth"><a href="/login">Login</a></li>
+                    {% elif current_user.is_authenticated %}
+                    <li class="auth"><a>Hello, {{current_user.username}}<i class="fa fa-angle-down"></i></a>
+                        <ul class="dropdown_menu">
+                            <li><a href="/logout">Log out</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/aboutus">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/our-rooms">Our rooms</a></li>
+                </ul>
+            </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Mobile menu end -->
+</div>

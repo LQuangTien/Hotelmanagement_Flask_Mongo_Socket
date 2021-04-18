@@ -1,0 +1,110 @@
+{% extends 'base/base.html' %}
+{% block title %}
+    <title>Chondo Hotel | Room booking</title>
+{% endblock %}
+{% block content %}
+    <!--room booking start-->
+    <div class="room-booking ptb-100 white_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="booking_form">
+                        <div class="form-title">
+                            <h2>Book A Room</h2>
+                            <p>There are many variations of passages of Lorem Ipsum available, but the majority ve sffered alteration in some form, by injected humour</p>
+                        </div>
+
+                        <div class="room-booking-box">
+                            <form action="#">
+                                <div class="booking-box1 mb-15 fix">
+                                    <div class="booking-filed">
+                                        <input type="text" placeholder="your name" value="Your name">
+                                    </div>
+                                    <div class="booking-filed">
+                                        <input type="text" placeholder="Your email" value="Your email">
+                                    </div>
+                                </div>
+                                <div class="booking-box2 mb-15 fix">
+                                    <div class="b_date">
+                                        <input class="date-picker" type="text" placeholder="Arrive Date">
+                                        <i class="mdi mdi-calendar-text"></i>
+                                    </div>
+                                    <div class="b_date">
+                                        <input class="date-picker" type="text" placeholder="Departure Date">
+                                        <i class="mdi mdi-calendar-text"></i>
+                                    </div>
+                                </div>
+                                <div class="booking-box3 mb-15 fix">
+                                    <div class="select_book">
+                                        <select name="book">
+                                            <option value="" selected>Adult</option>
+                                            <option value="1">Teen</option>
+                                            <option value="1">old</option>
+                                        </select>
+                                    </div>
+                                    <div class="select_book">
+                                        <select name="book">
+                                            <option value="" selected>Children</option>
+                                            <option value="1">Teen</option>
+                                            <option value="1">old</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="select-book room  mb-15 fix">
+                                    <select name="book">
+                                        <option value="" selected>Room</option>
+                                        <option value="1">Roome 101</option>
+                                        <option value="1">Roome 102</option>
+                                    </select>
+                                </div>
+                                <div class="booking-comment fix">
+                                    <textarea placeholder="comment"></textarea>
+                                </div>
+                                <div class="submit-form mt-25">
+                                    <button type="submit">Check Availability</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="selcted-room">
+                        <div class="select-room-inner">
+                            <div class="select-room-title">
+                                <h3>Selected Room</h3>
+                                <p>There are many variations of passages of Lorem Ipsum available,</p>
+                            </div>
+                            <div class="room-rent fix mb-45">
+                                <div class="room-rent-img">
+                                    <img src="images/room/small-room.jpg" alt="">
+                                </div>
+                                <div class="room-rent-desc">
+                                    <h3 class="roome-rent-title">SINGLE Room</h3>
+                                    <div class="room-sub-desc">
+                                        <h4>Total Price</h4>
+                                        <h3>550<span>/per night</span></h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="room-social-share mb-45">
+                                <h3>Social share</h3>
+                                <p>There are many variations of passages of Lorem Ipsum available,</p>
+                                <div class="social-links">
+                                    <a href="#"><i class="mdi mdi-facebook"></i></a>
+                                    <a href="#"><i class="mdi mdi-rss"></i></a>
+                                    <a href="#"><i class="mdi mdi-google-plus"></i></a>
+                                    <a href="#"><i class="mdi mdi-instagram"></i></a>
+                                </div>
+                            </div>
+                            <div class="need-help">
+                                <h3>Need Booking Help?</h3>
+                                <h4>Phone: <span>+98 98 95547 587</span></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--room booking end-->
+{% endblock %}

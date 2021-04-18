@@ -1,0 +1,53 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Page not found</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <{% include 'blocks/style.html' %}
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!--Header section start-->
+        <div class="header-section about-us">
+            <div class="bg-opacity"></div>
+            {% include 'blocks/navbar.html' %}
+            <!-- ERROR AREA START -->
+            <div class="error-area text-center ptb-100">
+               <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="error-content ">
+                                <h2>404</h2>
+                                <h3>Page not found!</h3>
+                                <h4>Oops! Looks like something going rong</h4>
+                                <p>We can’t seem to find the page you’re looking for <br>
+                                    make sure that you have typed the currect URL</p>
+                                <a class="go-home" href="/">Go to home</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+        <!--Header section end-->
+        <!-- search bar Start -->
+        {% include 'blocks/searchbar.html' %}
+        <!-- search bar End -->
+
+        <!-- Start page content -->
+        <!-- End page content -->
+
+        {% include 'blocks/footer.html' %}
+    </div>
+
+   {% include 'blocks/script.html' %}
+</body>
+
+</html>

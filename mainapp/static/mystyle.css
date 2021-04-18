@@ -1,0 +1,27 @@
+.booking-label {
+  color: #fff;
+  display: block;
+}
+#hasForeigner {
+ width: 28px;
+ height: 28px;
+ margin-left: 5%;
+}
+#hasForeignerInput{
+  display: flex;
+  align-items: center;
+}
+.auth {
+  float: right;
+}
+.auth span {
+  font-weight: 600;
+  margin-left: 4px;
+}
+.thanhnav {
+  display: block;
+  width: 90%;
+}
+#arriveDate, #departureDate {
+ border: 1px solid white;
+}
