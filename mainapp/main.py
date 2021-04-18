@@ -1,7 +1,9 @@
 from os import environ
 from flask_mail import Message
 from flask import render_template, session, jsonify
-from mainapp import app, login, utils, mail
+from flask_socketio import emit, join_room, send
+
+from mainapp import app, login, utils, mail, socketio
 from flask_login import login_user, login_required
 from mainapp.services import auth, room, user
 
@@ -100,7 +102,7 @@ def login():
     if not user:
       return render_template('hotel/login.html', error=error)
     login_user(user=user)
-    session['user'] = str(user.id)
+    session['user'] = [str(user.id), user.role]
     next = utils.handleNextUrl(request)
     return redirect(next)
 
@@ -127,7 +129,43 @@ def roomtypes():
   return jsonify({"types": types, "maxCapacity": maxCapacity})
 
 
+@app.route("/chat", methods=['post', 'get'])
+@login_required
+def chat():
+    return render_template('hotel/chat.html')
+
+@socketio.on('join')
+def join():
+  if not session.get('user'):
+    return
+
+  [id, role] = session.get('user')
+  consultant = user.getById(id)
+  if (role == 2):
+    join_room('users')
+    if not hasattr(socketio, "consultants"):
+      return
+    socketio.emit('user_join_chat', socketio.consultants, room='users')
+    return
+  if(role == 3):
+    if not hasattr(socketio,"consultants"):
+      socketio.consultants = []
+    if(consultant not in socketio.consultants):
+      socketio.consultants.append(consultant)
+    join_room('consultants')
+    socketio.emit('consultants_join_website',socketio.consultants, room='users')
+    return
+@socketio.on('disconnect')
+def disconnect():
+  [id, role] = session.get('user')
+  consultant = user.getById(id)
+  if (role == 3):
+    if (consultant in socketio.consultants):
+      socketio.consultants.remove(consultant)
+    socketio.emit('consultants_join_website', socketio.consultants, room='users')
+  return
+
 if __name__ == "__main__":
   from mainapp.admin_module import *
 
-  app.run(debug=True, port=int(environ.get('PORT')))
+  socketio.run(app, debug=True, port=int(environ.get('PORT')))

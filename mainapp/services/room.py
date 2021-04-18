@@ -57,7 +57,7 @@ def handleGetBooking(request):
 
 def createReservation(bookingInfo):
   reserv = reservation.create(bookingInfo)
-  userId = session.get('user')
+  userId = session.get('user')[0]
   currentUser = user.get(userId)
   currentUser.reservations.append(reserv.id)
   currentUser.save()
@@ -90,7 +90,7 @@ def bookingRoom(request):
   SURCHARGE_FOREIGNER = regulations[3].value
   roomName = int(request.form.get("roomName"))
   currentRoom = room.get(roomName)
-  userId = session.get('user')
+  userId = session.get('user')[0]
   currentUser = user.get(userId)
   bookForm = session.get('bookForm')
   arriveDate = bookForm['arriveDate']

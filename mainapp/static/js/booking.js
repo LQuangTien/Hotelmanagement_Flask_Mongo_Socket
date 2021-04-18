@@ -5,7 +5,6 @@ $( document ).ready(function() {
     const {types, maxCapacity} = data;
     types.forEach((type,index) => {
       $("#type").append(`<option value=${type}>${type}</option>`);
-      numberOfGuest
     })
     for(let index = 0; index < maxCapacity; index++ ){
           $("#numberOfGuest").append(`<option value=${index+1}>${index+1}</option>`);
