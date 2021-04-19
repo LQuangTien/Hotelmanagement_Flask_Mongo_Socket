@@ -1,11 +1,13 @@
 from os import environ
+
+from flask.json import dumps
 from flask_mail import Message
 from flask import render_template, session, jsonify
 from flask_socketio import emit, join_room, send
 
 from mainapp import app, login, utils, mail, socketio
 from flask_login import login_user, login_required
-from mainapp.services import auth, room, user
+from mainapp.services import auth, room, user, messages as Messes
 
 login.login_view = "login"
 
@@ -128,42 +130,96 @@ def roomtypes():
   types, maxCapacity = room.getRoomTypes()
   return jsonify({"types": types, "maxCapacity": maxCapacity})
 
+@app.route('/api/currentuser')
+def currentuser():
+  [id, role] = session.get('user')
+  return user.getById(id)
 
 @app.route("/chat", methods=['post', 'get'])
 @login_required
 def chat():
-    return render_template('hotel/chat.html')
+  return render_template('hotel/chat.html')
+
 
 @socketio.on('join')
 def join():
-  if not session.get('user'):
-    return
-
+  if not session.get('user'): return
+  
   [id, role] = session.get('user')
-  consultant = user.getById(id)
   if (role == 2):
     join_room('users')
-    if not hasattr(socketio, "consultants"):
-      return
+    if not hasattr(socketio, "consultants"): return
     socketio.emit('user_join_chat', socketio.consultants, room='users')
     return
-  if(role == 3):
-    if not hasattr(socketio,"consultants"):
+  if (role == 3):
+    consultant = user.getById(id)
+    if not hasattr(socketio, "consultants"):
       socketio.consultants = []
-    if(consultant not in socketio.consultants):
+    if (consultant not in socketio.consultants):
       socketio.consultants.append(consultant)
-    join_room('consultants')
-    socketio.emit('consultants_join_website',socketio.consultants, room='users')
-    return
+    join_room(consultant)
+    history = Messes.getConsultantHistory(consultant)
+    socketio.emit('consultants_join_chat', socketio.consultants, room='users')
+    socketio.emit('consultants_work', history, room=consultant)
+  return
+
+
 @socketio.on('disconnect')
 def disconnect():
   [id, role] = session.get('user')
+  if (role != 3):
+    return
   consultant = user.getById(id)
-  if (role == 3):
-    if (consultant in socketio.consultants):
-      socketio.consultants.remove(consultant)
-    socketio.emit('consultants_join_website', socketio.consultants, room='users')
+  # if (consultant in socketio.consultants):
+  socketio.consultants.remove(consultant)
+  socketio.emit('consultants_join_chat', socketio.consultants, room='users')
   return
+
+
+@socketio.on('user_load_chat')
+def user_load_chat(target):
+  [id, role] = session.get('user')
+  currentUser = user.getById(id)
+  roomChat = currentUser+'_'+target
+  join_room(roomChat)
+  mess = Messes.get(currentUser, target);
+  socketio.emit('server_respone_chat_toUser', dumps({'data': mess, 'target': target}), room=roomChat)
+
+@socketio.on('consultant_load_chat')
+def consultant_load_chat(target):
+  [id, role] = session.get('user')
+  currentUser = user.getById(id)
+  roomChat = currentUser+'_'+target
+  join_room(roomChat)
+  mess = Messes.get(target, currentUser);
+  socketio.emit('server_respone_chat_toConsultant', dumps({'data': mess, 'target': target}), room=roomChat)
+
+@socketio.on('send_message')
+def send_message(data):
+  [id, role] = session.get('user')
+  currentUser = user.getById(id)
+  message = data['message']
+  toUser = data['toUser']
+  roomUser = ''
+  roomConsultant = ''
+  if(role == 2):
+    roomUser = currentUser + '_' + toUser
+    roomConsultant = toUser + '_' + currentUser
+  if (role == 3):
+    roomUser = toUser + '_' + currentUser
+    roomConsultant = currentUser + '_' + toUser
+  Messes.create(currentUser, toUser, message);
+  mess = Messes.get(currentUser, toUser);
+  if (role == 2):
+    socketio.emit('server_respone_chat_toUser', dumps({'data': mess, 'target': toUser}), room=roomUser)
+    socketio.emit('server_respone_chat_toConsultant', dumps({'data': mess, 'target': currentUser}), room=roomConsultant)
+    history = Messes.getConsultantHistory(toUser)
+    socketio.emit('consultants_work', history, room=toUser)
+  if (role == 3):
+    socketio.emit('server_respone_chat_toUser', dumps({'data': mess, 'target': currentUser}), room=roomUser)
+    socketio.emit('server_respone_chat_toConsultant', dumps({'data': mess, 'target': toUser}), room=roomConsultant)
+    history = Messes.getConsultantHistory(currentUser)
+    socketio.emit('consultants_work', history, room=currentUser)
 
 if __name__ == "__main__":
   from mainapp.admin_module import *

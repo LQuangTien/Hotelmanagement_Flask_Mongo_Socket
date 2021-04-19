@@ -5,7 +5,7 @@ from flask_login import logout_user, current_user
 from werkzeug.utils import redirect
 from mainapp import admin
 from flask_admin.contrib.mongoengine import ModelView
-from mainapp.models_mongodb import users, rooms, reservations, regulation
+from mainapp.models_mongodb import users, rooms, reservations, regulation, messages
 from mainapp.services import report
 from mainapp.services.report import MyBarGraph
 
@@ -75,5 +75,6 @@ admin.add_view(UserView(users))
 admin.add_view(AuthenticatedView(rooms))
 admin.add_view(AuthenticatedView(reservations))
 admin.add_view(AuthenticatedView(regulation))
+admin.add_view(AuthenticatedView(messages))
 admin.add_view(aboutUsView(name='About us'))
 admin.add_view(logoutView(name='Logout'))

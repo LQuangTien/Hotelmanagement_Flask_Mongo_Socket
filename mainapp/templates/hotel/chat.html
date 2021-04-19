@@ -25,32 +25,19 @@
           </div>
       </div>
       </div>
-      <div style="overflow: hidden; width: 100%; height: 100%;">
+      <div id="chatWrapper" style="overflow: hidden; width: 100%; height: 100%;">
         <div id='chat-panel' class="chat-panel"
              style="overflow-y: scroll; padding-right: 17px;; box-sizing: content-box;  width: 100%; height: 350px;">
-          <div class="row no-gutters">
-            <div class="col-md-12">
-              <div class="chat-bubble chat-bubble--left">
-                Hello dude!
-              </div>
-            </div>
-          </div>
-          <div class="row no-gutters">
-            <div class="col-md-12 offset-md-9">
-              <div class="chat-bubble chat-bubble--right">
-                Hello dude!
-              </div>
-            </div>
-          </div>
+
         </div>
       </div>
       <div class="row">
         <div class="col-12">
           <div class="chat-box-tray">
             <i class="material-icons">sentiment_very_satisfied</i>
-            <input type="text" placeholder="Type your message here...">
-            <i class="material-icons">mic</i>
-            <i class="material-icons">send</i>
+            <input id="chatInput" type="text" placeholder="Type your message here...">
+            <i class="material-icons ">mic</i>
+            <i id="sendButton" class="material-icons cursor-pointer">send</i>
           </div>
         </div>
       </div>
@@ -60,9 +47,7 @@
 {% endblock %}
 
 {% block script %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
-        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
-        crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='js/socket.io.js')}}"></script>
 <script src="{{ url_for('static', filename='js/chat.js')}}"></script>
 
 {% endblock %}
