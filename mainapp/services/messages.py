@@ -5,8 +5,8 @@ def get(fromUser, toUser):
   return messages.get(fromUser, toUser)
 
 
-def create(fromUser, toUser, content):
-  return messages.create(fromUser, toUser, content)
+def create(fromUser, toUser, content, file, type):
+  return messages.create(fromUser, toUser, content, file, type)
 
 
 def getConsultantHistory(consultant):

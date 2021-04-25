@@ -4,6 +4,10 @@ from mongoengine import *
 from flask_login import UserMixin
 
 
+class Animal(Document):
+  photo = FileField()
+
+
 class embReservation(EmbeddedDocument):
   arriveDate = DateField(required=True, null=False)
   departureDate = DateField(required=True, null=False)
@@ -87,4 +91,6 @@ class messages(Document, UserMixin):
   fromUser = StringField(max_length=50, null=False, required=True)
   toUser = StringField(max_length=50, null=False, required=True)
   content = StringField(max_length=1000, null=False, required=True)
+  file = StringField(max_length=9999999, null=True, required=False)
+  type = StringField(max_length=50, null=True, required=False)
   created_at = DateTimeField(null=False, required=True, default=datetime.datetime.now())

@@ -36,7 +36,13 @@
           <div class="chat-box-tray">
             <i class="material-icons">sentiment_very_satisfied</i>
             <input id="chatInput" type="text" placeholder="Type your message here...">
-            <i class="material-icons ">mic</i>
+            <input type="file" id="image" name="image">
+            <div id="controls">
+              <button id="recordButton">Record</button>
+              <button id="pauseButton" disabled>Pause</button>
+              <button id="stopButton" disabled>Stop</button>
+            </div>
+            <ol id="recordingsList"></ol>
             <i id="sendButton" class="material-icons cursor-pointer">send</i>
           </div>
         </div>
@@ -48,6 +54,7 @@
 
 {% block script %}
 <script src="{{ url_for('static', filename='js/socket.io.js')}}"></script>
+<script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
 <script src="{{ url_for('static', filename='js/chat.js')}}"></script>
 
 {% endblock %}

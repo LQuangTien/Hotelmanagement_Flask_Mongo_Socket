@@ -1,3 +1,5 @@
+import base64
+import copy
 from os import environ
 
 from flask.json import dumps
@@ -7,6 +9,8 @@ from flask_socketio import emit, join_room, send
 
 from mainapp import app, login, utils, mail, socketio
 from flask_login import login_user, login_required
+
+from mainapp.models_mongodb import messages as MesModel, Animal
 from mainapp.services import auth, room, user, messages as Messes
 
 login.login_view = "login"
@@ -135,6 +139,20 @@ def currentuser():
   [id, role] = session.get('user')
   return user.getById(id)
 
+@app.route('/api/audio')
+def audio():
+  # mes = MesModel.objects().filter(toUser='tien', content='wav').first()
+  # with open('static/audio/CantinaBand3.wav', 'rb') as fd:
+  #     mes.file.put(fd, content_type='audio/wav')
+  # mes.save()
+  # print("save roi")
+  # marmot = Animal.objects().first()
+  # photo = marmot.photo.read()
+  # a = base64.b64encode(photo)
+  # a = a.decode("utf-8")
+  # content_type = marmot.photo.content_type
+  return jsonify({"audio":""})
+
 @app.route("/chat", methods=['post', 'get'])
 @login_required
 def chat():
@@ -144,7 +162,7 @@ def chat():
 @socketio.on('join')
 def join():
   if not session.get('user'): return
-  
+
   [id, role] = session.get('user')
   if (role == 2):
     join_room('users')
@@ -175,6 +193,22 @@ def disconnect():
   socketio.emit('consultants_join_chat', socketio.consultants, room='users')
   return
 
+def serializeChatResponse(mess):
+  result = []
+  for mes in mess:
+    if(mes.file == None):
+      result.append(mes)
+    else:
+      file = base64.b64encode(mes.file.read())
+      file = file.decode("utf-8")
+      result.append({
+        "fromUser": mes.fromUser,
+        "toUser": mes.toUser,
+        "content": mes.content,
+        "created_at": mes.created_at,
+        "file": file
+      })
+  return result
 
 @socketio.on('user_load_chat')
 def user_load_chat(target):
@@ -182,8 +216,15 @@ def user_load_chat(target):
   currentUser = user.getById(id)
   roomChat = currentUser+'_'+target
   join_room(roomChat)
+
+  # mes = MesModel.objects().filter(toUser='tien', content='wav').first()
+  # with open('static/audio/a.jpg', 'rb') as fd:
+  #   mes.file.put(fd, content_type='image/jpg')
+  # mes.save()
+  # print("save roi")
+
   mess = Messes.get(currentUser, target);
-  socketio.emit('server_respone_chat_toUser', dumps({'data': mess, 'target': target}), room=roomChat)
+  socketio.emit('server_respone_chat_toUser', dumps({"data": mess, "target": target}), room=roomChat)
 
 @socketio.on('consultant_load_chat')
 def consultant_load_chat(target):
@@ -200,6 +241,8 @@ def send_message(data):
   currentUser = user.getById(id)
   message = data['message']
   toUser = data['toUser']
+  file = data['file']
+  type = data['type']
   roomUser = ''
   roomConsultant = ''
   if(role == 2):
@@ -208,8 +251,9 @@ def send_message(data):
   if (role == 3):
     roomUser = toUser + '_' + currentUser
     roomConsultant = currentUser + '_' + toUser
-  Messes.create(currentUser, toUser, message);
+  Messes.create(currentUser, toUser, message, file['binary'], type);
   mess = Messes.get(currentUser, toUser);
+
   if (role == 2):
     socketio.emit('server_respone_chat_toUser', dumps({'data': mess, 'target': toUser}), room=roomUser)
     socketio.emit('server_respone_chat_toConsultant', dumps({'data': mess, 'target': currentUser}), room=roomConsultant)

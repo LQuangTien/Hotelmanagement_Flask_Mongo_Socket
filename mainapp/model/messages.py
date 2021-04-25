@@ -8,8 +8,8 @@ def get(fromUser, toUser):
     'created_at')
 
 
-def create(fromUser, toUser, content):
-  mess = messages(fromUser=fromUser, toUser=toUser, content=content)
+def create(fromUser, toUser, content, file, type):
+  mess = messages(fromUser=fromUser, toUser=toUser, content=content, file=file, type=type)
   mess.save()
   return mess
 
