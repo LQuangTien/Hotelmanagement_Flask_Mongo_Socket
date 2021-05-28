@@ -9,7 +9,7 @@ from mainapp.model import reservation
 #   return reservations, perPage, totalPage
 
 def create(bookingInfo):
-  userId = session.get('user')
+  userId, role  = session.get('user')
   reservationData = {
     'room': bookingInfo['roomId'],
     'user': userId,

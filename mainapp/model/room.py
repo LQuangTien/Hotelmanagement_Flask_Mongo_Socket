@@ -1,6 +1,10 @@
 from datetime import datetime
+
+from mongoengine import Q
+
 from mainapp.models_mongodb import rooms, reservations
 import time
+
 
 # ROOM_ROOMTYPE = db.session.query(Room, RoomType).join(RoomType, Room.type == RoomType.id)
 # ROOM_ROOMTYPE_RESERVATION = db.session.query(Room, RoomType, Reservation)
@@ -32,16 +36,18 @@ def getByDate(type=None, arriveDate=None, departureDate=None):
   #     name__nin=[res.room.name for res in matchedReservations]
   #   )
   #
-#   rooms.objects().filter(
-#     name__nin=[res.room.name for res in matchedReservations],
-#     type=type
-#   )
-
+  #   rooms.objects().filter(
+  #     name__nin=[res.room.name for res in matchedReservations],
+  #     type=type
+  #   )
 
   # Bat chuan hoa
   roomList = rooms.objects()
-  bookedRoom = roomList.filter(reservations__arriveDate__gte=datetime.fromisoformat(arriveDate),
-                                      reservations__departureDate__lte=datetime.fromisoformat(departureDate))
+  a = Q(reservations__arriveDate__gte=datetime.fromisoformat(arriveDate))
+  b = Q(reservations__arriveDate__lte=datetime.fromisoformat(arriveDate))
+  c = Q(reservations__departureDate__lte=datetime.fromisoformat(departureDate))
+  d = Q(reservations__departureDate__gte=datetime.fromisoformat(departureDate))
+  bookedRoom = roomList.filter( (a and b) or (c and d) )
   if (type == None or type == 'None'):
     return roomList.filter(
       name__nin=[room.name for room in bookedRoom]

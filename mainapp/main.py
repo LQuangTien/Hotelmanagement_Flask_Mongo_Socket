@@ -1,16 +1,10 @@
 import base64
-import copy
 from os import environ
-
 from flask.json import dumps
-from flask_mail import Message
 from flask import render_template, session, jsonify
-from flask_socketio import emit, join_room, send
-
-from mainapp import app, login, utils, mail, socketio
+from flask_socketio import join_room
+from mainapp import app, login, utils,  socketio
 from flask_login import login_user, login_required
-
-from mainapp.models_mongodb import messages as MesModel, Animal
 from mainapp.services import auth, room, user, messages as Messes
 
 login.login_view = "login"
@@ -53,24 +47,8 @@ def ourRooms():
 
 
 @app.route("/aboutus")
-@login_required
 def aboutus():
   return render_template('hotel/about-us.html')
-
-
-@app.route("/contact", methods=['post', 'get'])
-def contact():
-  if request.method == 'GET':
-    return render_template('hotel/contact-us.html')
-  if request.method == 'POST':
-    name, email, message = auth.contactValidate(request)
-    msg = Message("Customer's contact",
-                  sender='tienkg5554@gmail.com',
-                  recipients=['tienkg4445@gmail.com'])
-    msg.body = "Email: " + email + "\n" + "Name: " + name + "\n" + message
-    mail.send(msg)
-    return redirect('/')
-
 
 @app.route("/booking", methods=['post', 'get'])
 @login_required
@@ -139,19 +117,6 @@ def currentuser():
   [id, role] = session.get('user')
   return user.getById(id)
 
-@app.route('/api/audio')
-def audio():
-  # mes = MesModel.objects().filter(toUser='tien', content='wav').first()
-  # with open('static/audio/CantinaBand3.wav', 'rb') as fd:
-  #     mes.file.put(fd, content_type='audio/wav')
-  # mes.save()
-  # print("save roi")
-  # marmot = Animal.objects().first()
-  # photo = marmot.photo.read()
-  # a = base64.b64encode(photo)
-  # a = a.decode("utf-8")
-  # content_type = marmot.photo.content_type
-  return jsonify({"audio":""})
 
 @app.route("/chat", methods=['post', 'get'])
 @login_required
@@ -216,13 +181,6 @@ def user_load_chat(target):
   currentUser = user.getById(id)
   roomChat = currentUser+'_'+target
   join_room(roomChat)
-
-  # mes = MesModel.objects().filter(toUser='tien', content='wav').first()
-  # with open('static/audio/a.jpg', 'rb') as fd:
-  #   mes.file.put(fd, content_type='image/jpg')
-  # mes.save()
-  # print("save roi")
-
   mess = Messes.get(currentUser, target);
   socketio.emit('server_respone_chat_toUser', dumps({"data": mess, "target": target}), room=roomChat)
 

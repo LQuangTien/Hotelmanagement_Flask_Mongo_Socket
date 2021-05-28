@@ -4,9 +4,6 @@ from mongoengine import *
 from flask_login import UserMixin
 
 
-class Animal(Document):
-  photo = FileField()
-
 
 class embReservation(EmbeddedDocument):
   arriveDate = DateField(required=True, null=False)

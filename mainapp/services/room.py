@@ -21,7 +21,7 @@ def getAll():
 def getRoomTypes():
   rooms = room.getAll()
   types = list(set([room.type for room in rooms]))
-  maxCapacity = int(regulation.getAll()[0].value)
+  maxCapacity = int(regulation.getAll().filter(name='maxCapacity').first().value)
   return types, maxCapacity
 
 
@@ -85,9 +85,9 @@ def handleGetRooms(request):
 
 def bookingRoom(request):
   regulations = regulation.getAll()
-  LIMIT_CAPACITY = int(regulations[1].value)
-  SURCHARGE_CAPACITY = regulations[2].value
-  SURCHARGE_FOREIGNER = regulations[3].value
+  LIMIT_CAPACITY = int(regulations.filter(name='limitCapacity').first().value)
+  SURCHARGE_CAPACITY = regulations.filter(name='surchargeCapacity').first().value
+  SURCHARGE_FOREIGNER = regulations.filter(name='surchargeForeigner').first().value
   roomName = int(request.form.get("roomName"))
   currentRoom = room.get(roomName)
   userId = session.get('user')[0]

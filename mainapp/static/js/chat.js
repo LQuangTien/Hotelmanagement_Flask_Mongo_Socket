@@ -161,6 +161,7 @@ $(document).ready(function () {
           file: fileObj,
           type: fileObj.type
         });
+        document.getElementById('image').value = "";
       };
     } else {
       socket.emit('send_message', {
@@ -189,11 +190,16 @@ $(document).ready(function () {
   //new audio context to help us record
   var recordButton = document.getElementById('recordButton');
   var stopButton = document.getElementById('stopButton');
-  var pauseButton = document.getElementById('pauseButton');
+//  var pauseButton = document.getElementById('pauseButton');
   //add events to those 3 buttons
   recordButton.addEventListener('click', startRecording);
   stopButton.addEventListener('click', stopRecording);
-  pauseButton.addEventListener('click', pauseRecording);
+//  pauseButton.addEventListener('click', pauseRecording);
+
+    stopButton.disabled = true;
+    recordButton.disabled = false;
+    stopButton.style.display = "none";
+    recordButton.style.display = "block";
 
   function startRecording() {
     /* Simple constraints object, for more advanced audio features see
@@ -207,8 +213,10 @@ https://addpipe.com/blog/audio-constraints-getusermedia/ */
     /* Disable the record button until we get a success or fail from getUserMedia() */
 
     recordButton.disabled = true;
+    recordButton.style.display = "none";
     stopButton.disabled = false;
-    pauseButton.disabled = false;
+    stopButton.style.display = "block";
+//    pauseButton.disabled = false;
 
     /* We're using the standard promise based getUserMedia()
 
@@ -235,7 +243,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia */
         //enable the record button if getUserMedia() fails
         recordButton.disabled = false;
         stopButton.disabled = true;
-        pauseButton.disabled = true;
+//        pauseButton.disabled = true;
       });
   }
 
@@ -255,18 +263,10 @@ https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia */
     console.log('stopButton clicked');
     stopButton.disabled = true;
     recordButton.disabled = false;
-    pauseButton.disabled = true;
-    pauseButton.innerHTML = 'Pause';
-    rec.stop(); //stop microphone access
-    gumStream.getAudioTracks()[0].stop();
-    rec.exportWAV(createDownloadLink);
-  }
-  function stopRecording() {
-    console.log('stopButton clicked');
-    stopButton.disabled = true;
-    recordButton.disabled = false;
-    pauseButton.disabled = true;
-    pauseButton.innerHTML = 'Pause';
+    stopButton.style.display = "none";
+    recordButton.style.display = "block";
+//    pauseButton.disabled = true;
+//    pauseButton.innerHTML = 'Pause';
     rec.stop(); //stop microphone access
     gumStream.getAudioTracks()[0].stop();
     rec.exportWAV(createDownloadLink);
