@@ -2,6 +2,8 @@ from math import ceil
 from flask import session
 from werkzeug.utils import redirect
 from bson import ObjectId
+
+from mainapp import utils
 from mainapp.models_mongodb import rooms, embReservation
 from mainapp.utils import subtractDate
 from mainapp.services import reservation
@@ -34,8 +36,8 @@ def getByDate(type, arriveDate, departureDate):
 
 def handlePostBooking(request):
   bookingInfo = bookingRoom(request)
-  # amount = float(bookingInfo['tax']) * bookingInfo['price'] * bookingInfo['dayTotal']
-  # qrURL = utils.createQRCode(int(amount))
+  #amount = float(bookingInfo['tax']) * bookingInfo['price'] * bookingInfo['dayTotal']
+  #qrURL = utils.createQRCode(int(amount))
   qrURL = '?errorCode=0'
   session['booking']['qrURL'] = qrURL
   return bookingInfo, qrURL

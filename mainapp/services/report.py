@@ -35,22 +35,29 @@ class MyBarGraph(BaseChart):
 
 
 def getReservationByQuery(input, month, year):
+  # lay ngay bat dau vaf ngay ket thuc trong thang
+  # tra ve tháng năm dạng date, không phải datetime để bỏ vô mongoengine
   start_date, end_date = getMonthRange(month, year)
-  reservations = reservation.getByDate(start_date, end_date)
-  types = list(set([room.type for room in room.getAll()]))
+  reservations = reservation.getByDate(start_date, end_date) # tim nhung reservation trong thang do
+  types = list(set([room.type for room in room.getAll()])) # 3 type
   result = [0 for i in range(0, len(types))]
-
+  # lap qua tung hoa don trong danh sach hoa don
   for reser in reservations:
-    for index in range(0, len(types)):
-      if (types[index] == reser.room.type):
+    for index in range(0, len(types)): # lap qua tung type trong types
+      # muc dich chia bieu đồ theo type
+      # type = [A,B,C]
+      # reuslt = [300,0,10]
+      # kiem tra phong trong hoa don thuoc loai phong nào
+      if (types[index]  == reser.room.type):
         if (input == "total"):
           result[index] += int(reser.total)
         elif (input == "dayTotal"):
           result[index] += int(reser.dayTotal)
   return result, types
+        #[300,0,100] [A,B,C]
 
 
-def getMonthRange(month, year):
+def getMonthRange(month, year): # lay ngay bat dau va ngay ket thuc trong thang
   num_days = calendar.monthrange(year, month)[1]
   start_date = datetime.date(year, month, 1)
   end_date = datetime.date(year, month, num_days)

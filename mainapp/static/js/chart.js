@@ -1,4 +1,4 @@
-var now = new Date();
+  var now = new Date();
   const urlParams = new URLSearchParams(window.location.search);
   const salesMonthParam = parseInt(urlParams.get('salesMonth')) || now.getMonth() + 1;
   const salesYearParam = parseInt(urlParams.get('salesYear')) || now.getFullYear();
@@ -17,7 +17,7 @@ function findsale() {
   }
   if(month < 1) {
     alert("Month must be between 1 and 12")
-    $('#monthsale').val(1)
+    $('#  ').val(1)
     month = 1
   }
   if(year < 2021) {

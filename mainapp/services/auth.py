@@ -31,7 +31,6 @@ def registerValidate(request):
     'sex': request.form.get('sex'),
     'address': request.form.get('Address')
   }
-
   isUsernameDuplicate = not not users.objects(username=userInfo['username'].strip()).first()
   isMailDuplicate = not not users.objects(email=userInfo['email'].strip()).first()
   if isUsernameDuplicate:

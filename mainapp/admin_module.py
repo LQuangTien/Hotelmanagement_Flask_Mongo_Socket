@@ -10,15 +10,15 @@ from mainapp.services import report
 from mainapp.services.report import MyBarGraph
 
 
-class AuthenticatedView(ModelView):
+class AuthenticatedView(ModelView): # co san template crud
   def is_accessible(self):
-    return current_user.is_authenticated and current_user.role == 1
+    return current_user.is_authenticated and current_user.role == 1 # 1 la admin
 
   def inaccessible_callback(self, name, **kwargs):
     return redirect(url_for('login_admin', next=request.url))
 
 
-class CustomAuthenticatedView(BaseView):
+class CustomAuthenticatedView(BaseView): # tu custom
   def is_accessible(self):
     return current_user.is_authenticated and current_user.role == 1
 
@@ -68,12 +68,19 @@ class logoutView(BaseView):
 
 class UserView(AuthenticatedView):
   column_exclude_list = ['password', ]
+  can_delete = False
+  can_edit = False
+  can_create = False
 
+class ReservationsView(AuthenticatedView):
+  can_delete  = False
+  can_edit = False
+  can_create = False
 
 admin.add_view(ReportView(name='Monthly Report'))
 admin.add_view(UserView(users))
 admin.add_view(AuthenticatedView(rooms))
-admin.add_view(AuthenticatedView(reservations))
+admin.add_view(ReservationsView(reservations))
 admin.add_view(AuthenticatedView(regulation))
 admin.add_view(AuthenticatedView(messages))
 admin.add_view(aboutUsView(name='About us'))

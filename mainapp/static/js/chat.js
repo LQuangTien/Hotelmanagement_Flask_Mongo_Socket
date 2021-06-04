@@ -127,8 +127,8 @@ $(document).ready(function () {
       div1.append(`<img class='profile-image' src='https://www.clarity-enhanced.net/wp-content/uploads/2020/06/robocop.jpg'
                    alt=''>
               <div class="text">
-                <h6>${username} (Online)</h6>
-                <p class='text-muted'>Hey, you're arrested!</p>
+                <h6>${username}</h6>
+                <p class='text-muted'></p>
               </div>
               <span class='time text-muted small'>13:21</span>`);
       $('#friends').append('<hr>');

@@ -158,22 +158,22 @@ def disconnect():
   socketio.emit('consultants_join_chat', socketio.consultants, room='users')
   return
 
-def serializeChatResponse(mess):
-  result = []
-  for mes in mess:
-    if(mes.file == None):
-      result.append(mes)
-    else:
-      file = base64.b64encode(mes.file.read())
-      file = file.decode("utf-8")
-      result.append({
-        "fromUser": mes.fromUser,
-        "toUser": mes.toUser,
-        "content": mes.content,
-        "created_at": mes.created_at,
-        "file": file
-      })
-  return result
+# def serializeChatResponse(mess):
+#   result = []
+#   for mes in mess:
+#     if(mes.file == None):
+#       result.append(mes)
+#     else:
+#       file = base64.b64encode(mes.file.read())
+#       file = file.decode("utf-8")
+#       result.append({
+#         "fromUser": mes.fromUser,
+#         "toUser": mes.toUser,
+#         "content": mes.content,
+#         "created_at": mes.created_at,
+#         "file": file
+#       })
+#   return result
 
 @socketio.on('user_load_chat')
 def user_load_chat(target):
@@ -226,4 +226,4 @@ def send_message(data):
 if __name__ == "__main__":
   from mainapp.admin_module import *
 
-  socketio.run(app, debug=True, port=int(environ.get('PORT')))
+  socketio.run(app, debug=True, port=8081)
